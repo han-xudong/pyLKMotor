@@ -3,7 +3,7 @@ from typing import Optional, Tuple
 
 
 class LKMotor:
-    def __init__(self, bus_channel, bus_interface, motor_id):
+    def __init__(self, bus_interface, bus_channel, motor_id, **kwargs):
         """Initialize the motor
 
         Args:
@@ -11,7 +11,7 @@ class LKMotor:
             motor_id (int): Motor ID
         """
         self.motor_id = motor_id
-        self.bus = can.interface.Bus(channel=bus_channel, interface=bus_interface)
+        self.bus = can.interface.Bus(interface=bus_interface, channel=bus_channel, **kwargs)
 
         self.temperature = 0
         self.voltage = 0
@@ -249,7 +249,10 @@ class LKMotor:
     def motor_shutdown(self):
         """Shutdown the motor
 
-        This function sends a command to the motor to shutdown the motor.
+        This function sends a command to the motor to turn off the motor. 
+        It will clear the number of turns and previous commands.
+        The LED light will shine slowly.
+        The motor can receive and respond to the commands, but does not execute them.
         """
 
         self._send_command(0x80)
@@ -259,6 +262,8 @@ class LKMotor:
         """Start the motor
 
         This function sends a command to the motor to start the motor.
+        The LED light will keep on.
+        The motor can receive commands and execute them.
         """
 
         self._send_command(0x88)
@@ -268,6 +273,8 @@ class LKMotor:
         """Stop the motor
 
         This function sends a command to the motor to stop the motor.
+        The state of the motor will not be cleared.
+        The motor can receive new commands and execute them.
         """
 
         self._send_command(0x81)
@@ -350,7 +357,7 @@ class LKMotor:
 
         Args:
             angle_control (int32_t): Angle control, unit: 0.01 degree/LSB
-            max_speed (int16_t, optional): Maximum speed, unit: 1 dps/LSB
+            max_speed (uint16_t, optional): Maximum speed, unit: 1 dps/LSB
         """
 
         if max_speed is None:
@@ -377,7 +384,7 @@ class LKMotor:
         Args:
             spin_direction (uint8_t): Spin direction, 0x00 for clockwise, 0x01 for counterclockwise
             angle_control (int32_t): Angle control, unit: 0.01 degree/LSB
-            max_speed (int16_t, optional): Maximum speed, unit: 1 dps/LSB
+            max_speed (uint16_t, optional): Maximum speed, unit: 1 dps/LSB
         """
 
         if max_speed is None:
@@ -407,7 +414,7 @@ class LKMotor:
 
         Args:
             angle_increment (int32_t): Angle increment, unit: 0.01 degree/LSB
-            max_speed (int16_t, optional): Maximum speed, unit: 1 dps/LSB
+            max_speed (uint16_t, optional): Maximum speed, unit: 1 dps/LSB
         """
 
         if max_speed is None:
@@ -424,7 +431,7 @@ class LKMotor:
         if response:
             return self._parse_response_2(response)
 
-    def read_control_param(self):
+    def read_control_params(self):
         """Read control parameter command
 
         This function sends a command to the motor to read the control parameter.
@@ -436,7 +443,7 @@ class LKMotor:
         self._send_command(0xC0)
         return self._receive_response()
 
-    def write_control_param(self, control_param_id, param_bytes):
+    def write_control_params(self, control_param_id, param_bytes):
         """Write control parameter command
 
         This function sends a command to the motor to write the control parameter.
@@ -491,7 +498,7 @@ class LKMotor:
         This function sends a command to the motor to read the multi-turn angle.
 
         Returns:
-            multi_turn_angle (int64_t): Multi-turn angle
+            multi_turn_angle (int64_t): Multi-turn angle, unit: 0.01 degree/LSB
         """
 
         self._send_command(0x92)
@@ -516,7 +523,7 @@ class LKMotor:
         return self.single_turn_angle
 
     def set_position_to_angle(self, multi_turn_angle):
-        """Set the current position as multi-turn angle
+        """Set the current position as a multi-turn angle
         
         Args:
             motor_angle (int): Target angle, unit: 0.01 degree/LSB
@@ -528,7 +535,7 @@ class LKMotor:
 
 
 if __name__ == "__main__":
-    motor = LKMotor(bus_channel="can0", bus_interface="socketcan", motor_id=1)
+    motor = LKMotor(bus_interface="socketcan", bus_channel="can0", motor_id=1)
 
     status_1 = motor.read_motor_status_1()
     print(f"Motor status 1: {status_1}")
