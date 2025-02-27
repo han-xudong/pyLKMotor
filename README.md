@@ -1,8 +1,8 @@
 # pyLKMotor: Control the LK motor with Python
 
-[![PyPI version](https://img.shields.io/pypi/v/pylkmotor.svg)](https://pypi.org/project/pylkmotor/)
-[![Python versions](https://img.shields.io/pypi/pyversions/pylkmotor.svg)](https://pypi.org/project/pylkmotor/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![PyPI version](https://img.shields.io/pypi/v/pylkmotor.svg?logo=pypi&logoColor=white)](https://pypi.org/project/pylkmotor/)
+[![Python versions](https://img.shields.io/pypi/pyversions/pylkmotor.svg?logo=python&logoColor=white)](https://pypi.org/project/pylkmotor/)
+[![License](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
 
 ## Description
 
