@@ -1,5 +1,9 @@
 # pyLKMotor: Control the LK motor with Python
 
+[![PyPI version](https://img.shields.io/pypi/v/pylkmotor.svg)](https://pypi.org/project/pylkmotor/)
+[![Python versions](https://img.shields.io/pypi/pyversions/pylkmotor.svg)](https://pypi.org/project/pylkmotor/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 ## Description
 
 PyLKMotor is a Python library to control the [LK motor](http://www.lkmotor.cn/default.aspx). It provides a simple interface to control the motor and read its status. The library supports:
@@ -22,7 +26,7 @@ To use this library, you need the following hardware:
 
 ## Installation
 
-The `pylkmotor` library supports `Python>=3.6`, tested on Windows 11, Ubuntu 22.04, and Raspberry Pi OS (bookworm). It can be installed using pip:
+The `pylkmotor` library supports `Python>=3.10`, tested on Windows 11, Ubuntu 22.04, and Raspberry Pi OS (bookworm). It can be installed using pip:
 
 ```bash
 pip install pylkmotor
@@ -201,7 +205,7 @@ motor.set_position_to_angle(multi_turn_angle={MULTI_TURN_ANGLE})
 
 ## License
 
-PyLKMotor is released under the MIT License.
+PyLKMotor is released under the [MIT License](LICENSE).
 
 ## Acknowledgement
 
