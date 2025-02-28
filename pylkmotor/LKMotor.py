@@ -1,5 +1,5 @@
 import can
-from typing import Optional, Tuple
+from typing import Optional
 
 
 class LKMotor:
@@ -7,11 +7,16 @@ class LKMotor:
         """Initialize the motor
 
         Args:
+            bus_interface (str): CAN bus interface, e.g. "socketcan", "kvaser", "serial"
             bus_channel (str): CAN bus channel
             motor_id (int): Motor ID
+            **kwargs: Additional arguments, e.g. baudrate, bitrate, etc.
         """
+
         self.motor_id = motor_id
-        self.bus = can.interface.Bus(interface=bus_interface, channel=bus_channel, **kwargs)
+        self.bus = can.interface.Bus(
+            interface=bus_interface, channel=bus_channel, **kwargs
+        )
 
         self.temperature = 0
         self.voltage = 0
@@ -203,7 +208,7 @@ class LKMotor:
         self._send_command(0x9A)
         response = self._receive_response()
         if response:
-            return self._update_motor_status_1(response)
+            return self._parse_response_1(response)
 
     def clear_error_flags(self):
         """Clear the error flags of the motor
@@ -214,7 +219,7 @@ class LKMotor:
         self._send_command(0x9B)
         response = self._receive_response()
         if response:
-            return self._update_motor_status_1(response)
+            return self._parse_response_1(response)
 
     def read_motor_status_2(self):
         """Read the motor status 2
@@ -230,7 +235,7 @@ class LKMotor:
         self._send_command(0x9C)
         response = self._receive_response()
         if response:
-            return self._update_motor_status_2(response)
+            return self._parse_response_2(response)
 
     def read_motor_status_3(self):
         """Read the motor status 3
@@ -244,12 +249,12 @@ class LKMotor:
         self._send_command(0x9D)
         response = self._receive_response()
         if response:
-            return self._update_motor_status_3(response)
+            return self._parse_response_3(response)
 
     def motor_shutdown(self):
         """Shutdown the motor
 
-        This function sends a command to the motor to turn off the motor. 
+        This function sends a command to the motor to turn off the motor.
         It will clear the number of turns and previous commands.
         The LED light will shine slowly.
         The motor can receive and respond to the commands, but does not execute them.
@@ -524,11 +529,11 @@ class LKMotor:
 
     def set_position_to_angle(self, multi_turn_angle):
         """Set the current position as a multi-turn angle
-        
+
         Args:
             motor_angle (int): Target angle, unit: 0.01 degree/LSB
         """
-        
+
         data = [0x00] * 3 + self._decimal_to_byte(multi_turn_angle, 4)
         self._send_command(0x95, data)
         return self._receive_response()
