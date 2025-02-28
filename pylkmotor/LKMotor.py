@@ -8,8 +8,10 @@ class LKMotor:
 
         Args:
             bus_interface (str): CAN bus interface, e.g. "socketcan", "kvaser", "serial"
+            bus_interface (str): CAN bus interface, e.g. "socketcan", "kvaser", "serial"
             bus_channel (str): CAN bus channel
             motor_id (int): Motor ID
+            **kwargs: Additional arguments, e.g. baudrate, bitrate, etc.
             **kwargs: Additional arguments, e.g. baudrate, bitrate, etc.
         """
 
