@@ -7,9 +7,12 @@ class LKMotor:
         """Initialize the motor
 
         Args:
+            bus_interface (str): CAN bus interface, e.g. "socketcan", "kvaser", "serial"
             bus_channel (str): CAN bus channel
             motor_id (int): Motor ID
+            **kwargs: Additional arguments, e.g. baudrate, bitrate, etc.
         """
+        
         self.motor_id = motor_id
         self.bus = can.interface.Bus(interface=bus_interface, channel=bus_channel, **kwargs)
 
