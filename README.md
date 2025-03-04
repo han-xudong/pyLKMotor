@@ -21,9 +21,10 @@ PyLKMotor is a Python library to control the [LK motor](http://www.lkmotor.cn). 
 To use this library, you need the following hardware:
 
 - LK motor
-- CAN cable
-- 24V power supply
 - CAN bus interface
+- 24V power supply
+
+Note that this library uses the CAN bus interface to communicate with the motor. You need to connect the motor to the CAN bus interface and power supply. We tested the library with SocketCAN on Linux, and USB-to-CAN adapters on Windows. More details for supported CAN bus interfaces can be found in the [python-can](https://python-can.readthedocs.io/en/stable/interfaces.html) library.
 
 ## Installation
 
