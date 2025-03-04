@@ -6,7 +6,7 @@
 
 ## Description
 
-PyLKMotor is a Python library to control the [LK motor](http://www.lkmotor.cn/default.aspx). It provides a simple interface to control the motor and read its status. The library supports:
+PyLKMotor is a Python library to control the [LK motor](http://www.lkmotor.cn). It provides a simple interface to control the motor and read its status. The library supports:
 
 - Enable/Disable the motor
 - Torque loop control
@@ -23,6 +23,7 @@ To use this library, you need the following hardware:
 - LK motor
 - CAN cable
 - 24V power supply
+- CAN bus interface
 
 ## Installation
 
@@ -209,5 +210,5 @@ PyLKMotor is released under the [MIT License](LICENSE).
 
 ## Acknowledgement
 
-- [LK Motor](http://www.lkmotor.cn/default.aspx)
-- [python-can](https://python-can.readthedocs.io/en/stable/)
+- [LK Motor](http://www.lkmotor.cn): The manufacturer of the LK motor, providing the [CAN protocol](docs/can_protocol.pdf).
+- [python-can](https://python-can.readthedocs.io/en/stable/): A Python library to control the CAN bus interface.
