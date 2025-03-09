@@ -59,17 +59,7 @@ motor = LKMotor(bus_interface={BUS_INTERFACE}, bus_channel={BUS_CHANNEL}, motor_
 - `motor_id`: The motor ID, e.g., `1`, `2`, etc.
 - `kwargs`: The keyword arguments to initialize the CAN bus interface, e.g., `baudrate`, etc.
 
-This depends on the CAN bus interface you are using. For example, if you are using the `socketcan` interface, you can initialize the motor as follows:
-
-```python
-motor = LKMotor(bus_interface='socketcan', bus_channel='can0', motor_id=1)
-```
-
-If you are using a USB-to-CAN adapter, you can initialize the motor as follows:
-
-```python
-motor = LKMotor(bus_interface='serial', bus_channel='COM3', motor_id=1, baudrate=1000000)
-```
+This depends on the CAN bus interface you are using.
 
 After initializing the motor, you can control the motor following the [tutorial](https://github.com/han-xudong/pyLKMotor/blob/main/docs/tutorial.ipynb).
 
