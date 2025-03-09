@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pylkmotor',
-    version='1.0.2',
+    version='1.0.4',
     author='Xudong Han',
     description='Python library for controlling LK motors',
     long_description=open("README.md").read(),
