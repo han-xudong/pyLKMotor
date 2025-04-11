@@ -63,6 +63,13 @@ This depends on the CAN bus interface you are using.
 
 After initializing the motor, you can control the motor following the [tutorial](https://github.com/han-xudong/pyLKMotor/blob/main/docs/tutorial.ipynb).
 
+## Resources
+
+In `docs/`, you can find the following resources:
+
+- `can_protocol.pdf`: The CAN protocol document provided by LK Motor.
+- `LK_motor_tool_v2.35.exe`: The LK motor tool to configure the motor parameters.
+
 ## License
 
 PyLKMotor is released under the [MIT License](LICENSE).
