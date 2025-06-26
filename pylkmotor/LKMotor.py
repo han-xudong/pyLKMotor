@@ -6,7 +6,8 @@ class LKMotor:
     def __init__(
         self, bus_interface: str, bus_channel: str, motor_id: int, **kwargs
     ) -> None:
-        """Initialize the motor
+        """
+        Initialize the motor.
 
         Args:
             bus_interface (str): CAN bus interface, e.g. "socketcan", "kvaser", "serial"
@@ -36,8 +37,9 @@ class LKMotor:
         self.current_B = 0
         self.current_C = 0
 
-    def _decimal_to_byte(self, value, digit):
-        """Convert a decimal number to a byte list
+    def _decimal_to_byte(self, value, digit) -> list:
+        """
+        Convert a decimal number to a byte list.
 
         Args:
             value(int): Decimal number
@@ -56,7 +58,8 @@ class LKMotor:
         return byte_list
 
     def _byte_to_decimal(self, values: list) -> int:
-        """Convert a byte list to a decimal number
+        """
+        Convert a byte list to a decimal number.
 
         Args:
             values(list): Byte list, arranged from low to high
@@ -74,7 +77,8 @@ class LKMotor:
         return value_dec
 
     def _send_command(self, command_byte, data=None) -> None:
-        """Send a command to the motor
+        """
+        Send a command to the motor.
 
         Args:
             command_byte (uint8_t): Command byte
@@ -90,7 +94,8 @@ class LKMotor:
         # print(f"Command sent to motor {self.motor_id} with data: {data}")
 
     def _receive_response(self, timeout: float = 0.1) -> Optional[list]:
-        """Receive a response from the motor
+        """
+        Receive a response from the motor.
 
         Args:
             timeout (float, optional): Timeout in seconds. Defaults to 0.1.
@@ -104,7 +109,8 @@ class LKMotor:
         return None
 
     def _parse_response_1(self, response: list) -> tuple:
-        """Parse the response data from the motor
+        """
+        Parse the response data from the motor.
 
         This function updates:
         - Motor temperature (int8_t, 1 °C/LSB)
@@ -146,7 +152,8 @@ class LKMotor:
         )
 
     def _parse_response_2(self, response: list) -> tuple:
-        """Parse the response data from the motor
+        """
+        Parse the response data from the motor.
 
         This function updates:
         - Motor temperature (int8_t, 1 °C/LSB)
@@ -175,7 +182,8 @@ class LKMotor:
         return self.temperature, self.iq, self.speed, self.encoder_value
 
     def _parse_response_3(self, response: list) -> tuple:
-        """Parse the response data from the motor
+        """
+        Parse the response data from the motor.
 
         This function updates:
         - Motor temperature (int8_t, 1 °C/LSB)
@@ -196,7 +204,8 @@ class LKMotor:
         return self.temperature, self.current_A, self.current_B, self.current_C
 
     def read_motor_status_1(self) -> Optional[tuple]:
-        """Read the motor status 1
+        """
+        Read the motor status 1.
 
         This function sends a command to the motor to read the motor status including:
         - Motor temperature (int8_t, 1 °C/LSB)
@@ -213,7 +222,8 @@ class LKMotor:
             return self._parse_response_1(response)
 
     def clear_error_flags(self) -> Optional[tuple]:
-        """Clear the error flags of the motor
+        """
+        Clear the error flags of the motor.
 
         This function sends a command to the motor to clear the error flags.
         """
@@ -224,7 +234,8 @@ class LKMotor:
             return self._parse_response_1(response)
 
     def read_motor_status_2(self) -> Optional[tuple]:
-        """Read the motor status 2
+        """
+        Read the motor status 2.
 
         This function sends a command to the motor to read the motor status including:
         - Motor temperature (int8_t, 1 °C/LSB)
@@ -240,7 +251,8 @@ class LKMotor:
             return self._parse_response_2(response)
 
     def read_motor_status_3(self) -> Optional[tuple]:
-        """Read the motor status 3
+        """
+        Read the motor status 3.
 
         This function sends a command to the motor to read the motor status including:
         - Motor temperature (int8_t, 1 °C/LSB)
@@ -253,8 +265,9 @@ class LKMotor:
         if response:
             return self._parse_response_3(response)
 
-    def motor_shutdown(self):
-        """Shutdown the motor
+    def motor_shutdown(self) -> Optional[list]:
+        """
+        Shutdown the motor.
 
         This function sends a command to the motor to turn off the motor.
         It will clear the number of turns and previous commands.
@@ -265,8 +278,9 @@ class LKMotor:
         self._send_command(0x80)
         return self._receive_response()
 
-    def motor_run(self):
-        """Start the motor
+    def motor_run(self) -> Optional[list]:
+        """
+        Start the motor.
 
         This function sends a command to the motor to start the motor.
         The LED light will keep on.
@@ -276,8 +290,9 @@ class LKMotor:
         self._send_command(0x88)
         return self._receive_response()
 
-    def motor_stop(self):
-        """Stop the motor
+    def motor_stop(self) -> Optional[list]:
+        """
+        Stop the motor.
 
         This function sends a command to the motor to stop the motor.
         The state of the motor will not be cleared.
@@ -286,9 +301,20 @@ class LKMotor:
 
         self._send_command(0x81)
         return self._receive_response()
+    
+    def motor_release(self) -> None:
+        """
+        Release the motor.
 
-    def brake_control(self, control_byte: int):
-        """Brake control command
+        This function stops the motor and shutdown the socketcan bus.
+        """
+        
+        self.motor_stop()
+        self.bus.shutdown()
+
+    def brake_control(self, control_byte: int) -> Optional[int]:
+        """
+        Brake control command.
 
         This function sends a command to the motor to control the brake.
 
@@ -302,8 +328,9 @@ class LKMotor:
         if response:
             return self._byte_to_decimal([response[1]])
 
-    def open_loop_control(self, power_control: int):
-        """Open loop control command
+    def open_loop_control(self, power_control: int) -> Optional[tuple]:
+        """
+        Open loop control command.
 
         This function sends a command to the motor to control the motor in open loop.
         Only realized on MS series motors.
@@ -318,8 +345,9 @@ class LKMotor:
         if response:
             return self._parse_response_2(response)
 
-    def torque_loop_control(self, iq_control: int):
-        """Torque loop control command
+    def torque_loop_control(self, iq_control: int) -> Optional[tuple]:
+        """
+        Torque loop control command.
 
         This function sends a command to the motor to control the motor in torque loop.
         Only realized on MF, MH, and MG series motors.
@@ -335,8 +363,9 @@ class LKMotor:
         if response:
             return self._parse_response_2(response)
 
-    def speed_loop_control(self, iq_control: int, speed_control: int):
-        """Speed loop control command
+    def speed_loop_control(self, iq_control: int, speed_control: int) -> Optional[tuple]:
+        """
+        Speed loop control command.
 
         This function sends a command to the motor to control the motor in speed loop.
 
@@ -358,7 +387,8 @@ class LKMotor:
     def multi_turn_position_control(
         self, angle_control, max_speed: Optional[int] = None
     ) -> Optional[tuple]:
-        """Multi-turn position control command
+        """
+        Multi-turn position control command.
 
         This function sends a command to the motor to control the motor in multi-turn position loop.
 
@@ -384,7 +414,8 @@ class LKMotor:
     def single_turn_position_control(
         self, spin_direction, angle_control, max_speed: Optional[int] = None
     ) -> Optional[tuple]:
-        """Single-turn position control command
+        """
+        Single-turn position control command.
 
         This function sends a command to the motor to control the motor in single-turn position loop.
 
@@ -415,7 +446,8 @@ class LKMotor:
     def incremental_position_control(
         self, angle_increment, max_speed: Optional[int] = None
     ) -> Optional[tuple]:
-        """Incremental position control command
+        """
+        Incremental position control command.
 
         This function sends a command to the motor to control the motor in incremental position loop.
 
@@ -438,8 +470,9 @@ class LKMotor:
         if response:
             return self._parse_response_2(response)
 
-    def read_control_params(self):
-        """Read control parameter command
+    def read_control_params(self) -> Optional[list]:
+        """
+        Read control parameter command.
 
         This function sends a command to the motor to read the control parameter.
 
@@ -450,8 +483,9 @@ class LKMotor:
         self._send_command(0xC0)
         return self._receive_response()
 
-    def write_control_params(self, control_param_id: int, param_bytes: list):
-        """Write control parameter command
+    def write_control_params(self, control_param_id: int, param_bytes: list) -> Optional[list]:
+        """
+        Write control parameter command.
 
         This function sends a command to the motor to write the control parameter.
 
@@ -465,7 +499,8 @@ class LKMotor:
         return self._receive_response()
 
     def read_encoder_data(self) -> tuple:
-        """Read encoder data command
+        """
+        Read encoder data command.
 
         This function sends a command to the motor to read the encoder data.
 
@@ -484,7 +519,8 @@ class LKMotor:
         return self.encoder_value, self.encoder_raw, self.encoder_offset
 
     def set_zero_position(self) -> int:
-        """Set the current position as the zero position
+        """
+        Set the current position as the zero position.
 
         This function sends a command to the motor to set the current position as the zero position.
         Note: the encoder offset will be updated until the motor is restarted.
@@ -500,7 +536,8 @@ class LKMotor:
         return self.encoder_offset
 
     def read_multi_turn_angle(self) -> int:
-        """Read the multi-turn angle
+        """
+        Read the multi-turn angle.
 
         This function sends a command to the motor to read the multi-turn angle.
 
@@ -515,7 +552,8 @@ class LKMotor:
         return self.multi_turn_angle
 
     def read_single_turn_angle(self) -> int:
-        """Read the single-turn angle
+        """
+        Read the single-turn angle.
 
         This function sends a command to the motor to read the single-turn angle.
 
@@ -529,8 +567,9 @@ class LKMotor:
             self.single_turn_angle = self._byte_to_decimal(response[4:8])
         return self.single_turn_angle
 
-    def set_position_to_angle(self, multi_turn_angle: int):
-        """Set the current position as a multi-turn angle
+    def set_position_to_angle(self, multi_turn_angle: int) -> Optional[list]:
+        """
+        Set the current position as a multi-turn angle.
 
         Args:
             motor_angle (int): Target angle, unit: 0.01 degree/LSB
