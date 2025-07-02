@@ -4,7 +4,7 @@
 [![Python versions](https://img.shields.io/pypi/pyversions/pylkmotor.svg?logo=python&logoColor=white)](https://pypi.org/project/pylkmotor/)
 [![Github](https://img.shields.io/badge/Github-pyLKMotor-purple.svg?logo=github&logoColor=white)](https://github.com/han-xudong/pyLKMotor)
 [![Tutorial](https://img.shields.io/badge/Tutorial-pyLKMotor-purple.svg?logo=read-the-docs&logoColor=white)](https://github.com/han-xudong/pyLKMotor/blob/main/docs/tutorial.ipynb)
-[![License](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
+[![License](https://img.shields.io/github/license/han-xudong/pyLKMotor.svg)](LICENSE)
 
 ## Description
 
